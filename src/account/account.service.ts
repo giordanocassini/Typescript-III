@@ -5,54 +5,94 @@ import { Account } from "./account.class";
 import { Client } from "../client/client.class";
 
 let accounts: Accounts = {
-    1: new Cc("01", "01", new Client("Paulo", "Jefferson Mendes Oliveira", "000.000.000-00"), 1),
-    2: new Cp("02", "01", new Client("João", "Mendes Oliveira", "000.000.000-00"), 2)
-}
+  1: new Cc(
+    "01",
+    "01",
+    new Client("Paulo", "Jefferson Mendes Oliveira", "000.000.000-00"),
+    1
+  ),
+  2: new Cp(
+    "02",
+    "01",
+    new Client("João", "Mendes Oliveira", "000.000.000-00"),
+    2
+  ),
+};
 
-export const findAll = async (): Promise<Accounts> => Object.values(accounts)
-export const find = async (id:number): Promise<Account> => accounts[id]
+export const findAll = async (): Promise<Accounts> => Object.values(accounts);
+
+export const find = async (id: number): Promise<Account> => accounts[id];
+
 export const create = async (newAccount: Cp | Cc): Promise<Account> => {
-    const id = newAccount.getId()
+  const id = newAccount.getId();
 
-    accounts[id] = newAccount
+  accounts[id] = newAccount;
 
-    return accounts[id]
-}
-export const update = async (id: number, accountUpdate: Account): Promise<Account | null> => {
-    const account = await find(id)
+  return accounts[id];
+};
 
-    if(!account){
-        return null
-    }
+export const update = async (
+  id: number,
+  accountUpdate: Account
+): Promise<Account | null> => {
+  const account = await find(id);
 
-    accounts[id] = accountUpdate
-    
-    return accounts[id]
-}
-export const remove = async(id: number): Promise<null | void> => {
-    const account = await find(id)
+  if (!account) {
+    return null;
+  }
 
-    if(!account){
-        return null
-    }
+  accounts[id] = accountUpdate;
 
-    delete accounts[id]
-}
-export const deposit = async (id: number, value: number): Promise<number | null> => {
-    const account = await find(id)
+  return accounts[id];
+};
 
-    if(!account){
-        return null
-    }
+export const remove = async (id: number): Promise<null | void> => {
+  const account = await find(id);
 
-    return account.deposit(value)
-}
-export const withdraw =async (id:number, value: number): Promise<number | null> => {
-    const account = await find(id)
+  if (!account) {
+    return null;
+  }
 
-    if(!account){
-        return null
-    }
+  delete accounts[id];
+};
 
-    return account.withdraw(value)
-}
+export const deposit = async (
+  id: number,
+  value: number
+): Promise<number | null> => {
+  const account = await find(id);
+
+  if (!account) {
+    return null;
+  }
+
+  return account.deposit(value);
+};
+
+export const withdraw = async (
+  id: number,
+  value: number
+): Promise<number | null> => {
+  const account = await find(id);
+
+  if (!account) {
+    return null;
+  }
+
+  return account.withdraw(value);
+};
+
+export const transfer = async (
+  accountId1: number,
+  accountId2: number,
+  value: number
+): Promise<string | null> => {
+  const account1 = await find(accountId1);
+  const account2 = await find(accountId2);
+
+  if (!account1 || !account2) {
+    return null;
+  }
+
+  return account1.transferTo(value, account2);
+};
