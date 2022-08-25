@@ -56,7 +56,7 @@ export class Account {
   public transferTo(
     value: number,
     account: Account
-  ): string | PromiseLike<number | null> | null {
+  ): string {
     this.withdraw(value);
     account.deposit(value);
     return `You transfered ${value} from ${
